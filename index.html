@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Archaeological Sites Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    #map { height: 600px; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([0, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    fetch('https://script.google.com/macros/s/AKfycbyJlZG2P9P5Z0KZIoYT23E2umG4rCV0vzOT_OutQ4ENvwFl52tlq7RPZK4ZM_H4125q/exec')
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(site => {
+          L.marker([site.latitude, site.longitude])
+            .bindPopup(`<b>${site.sitename}</b><br>${site.type}`)
+            .addTo(map);
+        });
+      });
+  </script>
+</body>
+</html>
